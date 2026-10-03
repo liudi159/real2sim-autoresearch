@@ -1,0 +1,62 @@
+{
+  "project": "Real2Sim AutoResearch",
+  "generation_mode": "built-in image_gen",
+  "purpose": "Conceptual research illustrations; not measured experimental results.",
+  "assets": [
+    {
+      "slug": "hero",
+      "prompt": "Use case: scientific-educational.\nAsset type: panoramic hero artwork for a high-end Chinese robotics research project blog called Real2Sim AutoResearch; conceptual design, not a measured result.\nCreate a polished wide landscape 3D scientific editorial illustration, approximately 16:9. A laboratory bench transitions smoothly left to right from a real-looking physical setup to editable cyan/cobalt triangle wireframe mesh to a clean simulated counterpart of the SAME setup. A clear open borosilicate glass beaker of water and a clear glass dropper/pipette with a round saturated blue rubber bulb are the central objects. Include a plain unbranded silver collaborative robotic arm with a physically plausible two-finger parallel gripper gently holding the rigid glass stem BELOW the bulb, never gripping the bulb. Keep the pipette tip pointing down and all glass objects plausibly intact. White and very light gray background, subtle light gray floor grid only in the simulation region, graphite shadows, saturated cobalt blue and cyan highlights. Precise industrial design rendering, delicate glass refraction, sophisticated soft studio light, substantial negative space, neat composition, no fake UI. No text, letters, numbers, logos, watermark or numerical performance data.",
+      "file_path": "assets/hero.png",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "bytes": 1788583
+    },
+    {
+      "slug": "framework",
+      "prompt": "Use case: infographic-diagram.\nAsset type: professional landscape scientific concept infographic for Real2Sim AutoResearch, a robotics research project blog.\nCreate a very polished wide landscape white-background infographic with six equal visual nodes arranged two rows of three with clear coherent blue arrows. Serpentine reading: top left OBSERVE → top middle RECONSTRUCT → top right HYPOTHESIZE → bottom right EXPERIMENT → bottom middle CALIBRATE → bottom left VALIDATE. Each node has a concise isometric 3D scientific illustration and one large readable uppercase graphite label directly underneath. OBSERVE: compact camera looking at an open glass beaker and a round blue-bulb clear glass pipette. RECONSTRUCT: same open beaker and pipette as fine blue triangle scene mesh. HYPOTHESIZE: three neat small hypothesis cards containing only simple symbols, blue and a touch of orange. EXPERIMENT: silver robot gripper with same lab objects. CALIBRATE: three parameter sliders with blue knobs and tiny simple physical-model object. VALIDATE: a grid of small varied held-out laboratory scenes with checkmarks. Blue connectors must indicate the six-node forward path above, and a modest thin orange feedback arrow routes outside the nodes from VALIDATE back toward HYPOTHESIZE. Style: high-end scientific journal illustration, clean white/light gray, graphite, saturated cobalt blue, cyan, restrained orange, precise glass and rubber materials, generous spacing. Exact readable labels only: \"OBSERVE\", \"RECONSTRUCT\", \"HYPOTHESIZE\", \"EXPERIMENT\", \"CALIBRATE\", \"VALIDATE\". No tiny paragraphs, no additional text, no numerical performance, no logos, no watermark. This is a conceptual research framework.",
+      "file_path": "assets/framework.png",
+      "dimensions": [
+        1774,
+        887
+      ],
+      "bytes": 1398528
+    },
+    {
+      "slug": "asset-atlas",
+      "prompt": "Use case: product-mockup.\nAsset type: research simulation asset atlas, polished wide landscape editorial plate.\nCreate six isolated studio objects in an evenly spaced 3 columns by 2 rows arrangement on a seamless white/light gray background. Every object is completely visible with generous equal margins, consistent isometric viewing angle and consistent soft contact shadows. Top row left: one clear glass pipette/dropper with a rounded cobalt blue rubber bulb, full long tapered glass stem visible, leaning slightly diagonally. Top row center: an empty open borosilicate glass beaker with subtle markings but no readable numbers, obvious open rim and hollow interior. Top row right: an empty open test tube, rounded bottom and visible open mouth. Bottom row left: one straight glass stirring rod, its complete length visible, slightly diagonal. Bottom row center: an empty open conical Erlenmeyer flask, clear open narrow rim and hollow neck. Bottom row right: one isolated unbranded industrial two-finger parallel robot gripper in brushed silver and graphite, physically plausible. Restrained saturated cobalt blue only on the rubber bulb and gripper accents, cyan glints on clear glass. Premium precise scientific 3D product visualization with fine glass refraction and believable smooth blue rubber. No labels, letters, numerals, captions, headers, logos or watermark. No extra objects. Landscape 16:9.",
+      "file_path": "assets/asset-atlas.png",
+      "dimensions": [
+        1672,
+        941
+      ],
+      "bytes": 1506614
+    },
+    {
+      "slug": "pipette-experiment",
+      "prompt": "Use case: scientific-educational.\nAsset type: wide three-panel research concept illustration showing pipette aspiration.\nCreate a high-end wide landscape scientific triptych with three evenly spaced panels on white/light gray. Each panel shows the SAME clear glass dropper/pipette with round cobalt blue rubber bulb and same simple silver two-finger robot end effector. Sequential correct experiment: left panel label \"SQUEEZE\": robot fingers press the sides of the blue rubber bulb so it is visibly deformed, glass tip pointing downward in air above an open glass beaker of water, air leaves tip. Middle panel label \"IMMERSE\": blue bulb remains compressed by fingers, pipette tip is submerged just below water surface in the beaker, glass stem still mostly empty. Right panel label \"RELEASE\": fingers have eased apart, rounded blue bulb re-expands, tip remains submerged in water, visible cyan water column has risen INSIDE the transparent glass stem. Show subtle cyan upward motion marks only in final panel. Prioritize mechanically intelligible contact between the fingers and soft bulb, consistent intact glass pipette, correct waterline and submerged tip. Illustrative conceptual rendering, not measured experimental footage. Precise isometric product visualization with graphite hardware, cobalt/cyan, delicate glass, soft shadows, generous space between panels. Only three text labels \"SQUEEZE\", \"IMMERSE\", \"RELEASE\", in large clean readable graphite uppercase. No measurements, numerical performance, logos, watermark, or other text.",
+      "file_path": "assets/pipette-experiment.png",
+      "dimensions": [
+        1774,
+        887
+      ],
+      "bytes": 1473138
+    },
+    {
+      "slug": "representation",
+      "prompt": "Use case: scientific-educational.\nAsset type: three-part comparison illustration for an editable simulation asset research blog.\nCreate a polished wide landscape scientific 3D illustration on white/light gray. Three equal side-by-side panels depict the SAME open empty glass beaker and SAME round cobalt-blue-rubber-bulb clear glass pipette, at consistent scale and isometric pose. Panel 1 label \"VISUAL MESH\": attractive transparent shaded glass surfaces with subtle cobalt fine triangle wireframe overlaid, visibly open beaker rim and hollow interior; realistic smooth round rubber bulb and clear long glass stem. Panel 2 label \"COLLISION\": translucent cyan simplified low-poly collision geometry, beaker composed of separate thin faceted wall segments around the circumference plus a base, leaving the entire top open and the inner cavity hollow; pipette's rigid narrow stem is a simplified slim capsule/cone, bulb rounded faceted proxy. Never depict the beaker as a solid filled cylinder. Panel 3 label \"PHYSICAL MODEL\": transparent glass beaker and glass pipette remain rigid, show the rubber bulb as a dotted soft-body particle lattice in blue with connecting springs, a small restrained orange deformation vector at the bulb; cyan material/model accents. Clean and mechanically meaningful comparison, precise industrial design, generous panel spacing, soft gray floor shadows, graphite labels. Exact large readable text only: \"VISUAL MESH\", \"COLLISION\", \"PHYSICAL MODEL\". No other text, performance metrics, numerical data, logos or watermark. Conceptual proposed representation, not an experimental result.",
+      "file_path": "assets/representation.png",
+      "dimensions": [
+        1774,
+        887
+      ],
+      "bytes": 1540920
+    }
+  ],
+  "limitations": [
+    "Generated conceptual visualizations should not be described as actual experimental results.",
+    "Framework feedback connector rendered with arrowheads at both validation and hypothesis ends; forward blue six-stage sequence is correct.",
+    "Pipette triptych uses a squeeze → immerse → release aspiration sequence; final released pipette is diagrammatically suspended."
+  ]
+}
