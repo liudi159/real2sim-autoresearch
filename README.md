@@ -1,42 +1,41 @@
-# Real2Sim AutoResearch — Research Blog
+# Real2Sim AutoResearch
 
-以图片为主的中文研究博客，介绍真实观测、场景重建、假设驱动实验、参数辨识和独立验证。
+以研究思路为主线的中文研究博客：从真实观测构建可检验的物理模型，组织参数辨识、主动测量与模型修订。
 
-## 内容
+在线地址：https://liudi159.github.io/real2sim-autoresearch/
 
-- 5 张原创 AI 生成图片：主视觉、框架、资产图册、表示对齐、滴管实验。
-- 三种研究循环的切换说明；六类资产说明。
-- 三个竞争假设 × 三个阶段的研究决策演示。
-- 26 项文献与项目链接，以及可下载的研究框架。
-- 响应式页面、键盘操作和图片放大。
+## v2 内容
 
-本仓库是研究方案网页。没有物理仿真后端、真实机器人连接或已测得的性能结果。生成图不是实测记录，也不是可下载的三维资产。
+- 10 个章节：研究问题、总体框架、单轮实验、资产建模、参数辨识、研究谱系、滴管案例、实验验证、实现路线、相关文献。
+- 统一的 SVG 线性图标；8 个可查看详细输入、步骤、输出的架构模块。
+- 8 个可点击研究节点，以及实验规范、证据判定视图。
+- 6 类资产的表示、测量与验收规范；滴管的 4 个研究阶段。
+- 显式模型与损失函数、参数可辨识性、主动实验策略、基线与消融。
+- 26 项前期文献及项目，支持搜索；完整研究方案可下载。
+- 响应式布局、键盘标签导航、减少动态效果支持。
 
-## 本地查看
+本仓库是研究方案网页，尚未连接仿真后端或真实机器人。研究谱系展示预设的假设和实验协议，不是实际运行记录，也没有虚构性能或实验结果。
 
-网页不需要安装依赖。直接打开 `index.html`，或：
+## 文件
 
-```sh
-python3 -m http.server 8000
-```
+- index.html：完整静态正文、图标定义和交互结构。
+- styles.css：白底、深绿与细线风格的响应式样式。
+- app.js：架构、资产、研究节点、案例阶段与文献搜索。
+- docs/research-blueprint.md：完整正文和交互内容附录。
+- docs/references.txt：前期整理的文献标题与链接。
+- assets/、docs/image-prompts.json：v1 生成图存档；v2 页面不加载这些图。
 
-然后打开 http://localhost:8000 。
+## 查看与部署
 
-## GitHub Pages
+无构建依赖。可直接打开 index.html，或在此目录运行 python3 -m http.server 8000。
 
-仓库：`liudi159/real2sim-autoresearch`。
+GitHub Actions 工作流会在 main 更新后发布到 GitHub Pages。资源路径兼容项目子目录。
 
-1. 将本目录的文件上传到仓库根目录。
-2. 在 Settings → Pages 中选择 GitHub Actions 作为发布源。
-3. 内置的 `Deploy research blog` 工作流会发布静态文件；也可手动运行 workflow_dispatch。
-4. 若仓库名为 `real2sim-autoresearch`，预期访问路径为 `https://liudi159.github.io/real2sim-autoresearch/`。发布状态以 GitHub Pages 和 Actions 为准。
+## 设计参考与研究边界
 
-当前页头链接指向项目仓库。所有站内资源使用相对路径，适用于 GitHub Pages 的项目子路径。
+本次改版按用户要求参考了以下页面的研究信息组织：
+- https://mate-robot.cn/research/RoboScientist/gallery/#/snapshot/experiment%3Agep-20260916%402026-09-16T05%3A09%3A35.085Z
+- https://mmlab.hk/research/PhysicalRSI
 
-## 图片与来源
+图标、布局、交互和研究文字为本页重新制作，没有复制参考页面的代码、实验视频、数据或性能结论。文献与方案之间的对应及研究边界在页面末尾说明。
 
-`assets/`：原始生成 PNG。`docs/image-prompts.json`：完整生成提示词与图像说明。图片通过内置 image_gen 生成，一图一请求。
-
-`docs/references.txt`：文献标题和链接。`docs/research-blueprint.md`：网页研究方案。
-
-页面版式参考了用户提供的 [stiff-physics 项目页](https://haoxiangntu.github.io/stiff-physics/#gui) 的分节阅读方式；页面代码、文字组织及图片均重新制作，没有复制其实验图、视频或性能数据。
