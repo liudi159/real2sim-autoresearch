@@ -4,6 +4,20 @@
 
 在线地址：https://liudi159.github.io/real2sim-autoresearch/
 
+## 新专题：自进化物理 VLM
+
+[阅读研究博客](https://liudi159.github.io/real2sim-autoresearch/docs/physical-vlm/) · [完整技术方案](docs/physical-vlm/research-proposal.md)
+
+基于 OmniFysics-Nano-V2 的方法主线，解释如何用 coding agent 连接自动标注、物理知识库校验、SFT、GRPO、主动感知和真实触觉，形成证据资产库与跨模态标注模型。
+
+- 10 个章节，完整讲解数据、模型、物理辨识、研究循环和评测。
+- 6 个可查看输入、处理、输出的架构模块。
+- 4 类主动观察／接触动作，以及 5 步盒子纠错案例。
+- 12 项相关研究与 17 章节完整方案下载。
+- 交互为研究方案演示；案例数字是教学示意，不是已运行实验结果。
+
+专题位于 `docs/physical-vlm/`，使用独立样式与脚本。现有 Pages 工作流已发布整个 `docs` 目录，无需新增构建依赖。
+
 ## v2 内容
 
 - 10 个章节：研究问题、总体框架、单轮实验、资产建模、参数辨识、研究谱系、滴管案例、实验验证、实现路线、相关文献。
