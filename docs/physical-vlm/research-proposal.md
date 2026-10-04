@@ -1,3 +1,7 @@
+# Self-Evolving Physical VLM：自进化物理视觉语言模型
+
+**Evidence-grounded Annotation, Active System Identification and Continual Learning**
+
 本方案以 **OmniFysics-Nano-V2 Technical Report: Understanding the Physical World Across Modalities** 为明确基线，设计一套由 coding agent 组织的物理数据生产、模型训练和真实交互闭环。核心目标是同步形成两个成果：**带几何、物理属性和实验证据的资产库**，以及**能够自动标注物理属性、识别证据不足并根据接触反馈纠错的跨模态模型**。
 
 建议将研究问题表述为：在有限真实交互预算下，能否通过主动获取视觉、声音、触觉和力学证据，持续提高新资产的标注准确度、参数可辨识性和仿真预测能力，并把这些改进迁移到未见物体上。
