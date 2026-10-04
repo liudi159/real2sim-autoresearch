@@ -1078,3 +1078,117 @@ RELATED WORK & READING
 3. 记录液面曲线、体积、回弹误差与失败；必要时给出超出适用范围的判定。
 
 **阶段条件**：以独立 episode 作最终报告；若利用测试结果继续修改模型，需要新的独立测试协议。
+
+
+## 工具映射与动态流程（v4）
+
+网页新增工具调用示意和滴管动作示意。均默认暂停；播放、拖动和阶段选择只改变示意图，不调用仿真器、不采集数据，也不产生实验结果。
+
+以下为 2026-10-03 项目工具注册表、适配器源码与部署验收的静态摘要。“已有实现”不等于整个研究 Agent 已验收；本次文档更新没有重新运行服务器实验。
+
+### 整理观测：数据校验 · 几何测量
+
+输入：独立轨迹、动作时间戳、尺度与相机信息。
+
+输出：Episode、质量掩码、数据版本。
+
+状态：刚体 MVP 已实现；视频前端待接入。
+
+- `prepare_episode` — 已有实现：校验独立 episode、任务引用与数据哈希。
+- `measure_dimensions` — 已有实现：由有来源的三维点与显式坐标变换测量尺寸。
+- `reconstruct_reference / segment_scene / track_interaction` — 待接入：计划连接 AHa-3D 的 Pi3X / SAM3 相关前端；真实视频端到端链路尚未验收。
+
+### 构建场景：AHa-3D · Blender · MuJoCo
+
+输入：资产查询、几何尺寸、装配与支撑约束。
+
+输出：可编辑 .blend、SceneBundle、MJCF。
+
+状态：资产检索与合成场景已验证；通用场景检查未通过。
+
+- `retrieve_assets` — 已验证：查询真实 AHa-3D 资产索引。
+- `build_editable_scene` — 合成验证：用 Blender 创建并重新打开合成盒子场景。
+- `compile_simulation` — 刚体 MVP：把 SI 单位的盒子场景编译为 MuJoCo MJCF。
+- `verify_xray / validate_scene_physics` — 未完成：源视角复核尚未验证；已尝试的放置检查仍有 not_settled 问题。
+
+### 冻结协议：Pydantic · SQLite · Landlock
+
+输入：TaskSpec、参数范围、数据划分、预算与指标。
+
+输出：冻结协议、预算记录、隔离的封存数据。
+
+状态：刚体 MVP 已验证。
+
+- `TaskSpec / Episode / ParameterSpec` — 数据契约：Pydantic 校验任务、观测、单位与参数边界。
+- `Store` — 已有实现：SQLite 记录仿真请求、预算、缓存和暂停 / 恢复状态。
+- `restrict` — Linux 隔离：Landlock 限制研究进程访问封存数据；独立最终评估另行执行。
+
+### 诊断假设：NumPy · 本地文献索引 · LLM 接口
+
+输入：逐阶段残差、参数候选、场景与历史记录。
+
+输出：敏感性报告、竞争假设、缺测清单。
+
+状态：数值诊断已有实现；真实 LLM 外循环待验证。
+
+- `analyze_sensitivity / diagnose_identifiability` — 刚体 MVP：有限差分、SVD 和剖面损失帮助发现耦合与不可辨识量。
+- `retrieve_literature` — 已有实现：只检索本地已核验文献登记表，不等同于实时全网检索。
+- `LLM research controller` — 待验证：解释证据、登记假设并选择下一步；尚无真实模型调用验收。
+
+### 选择实验：候选分歧排序 · MeasurementPlan
+
+输入：竞争解释、动作约束、观测噪声与采集成本。
+
+输出：实验规范，或真实测量请求。
+
+状态：刚体补测建议已实现；真实采集与机制修订待接入。
+
+- `rank_probe_actions / propose_measurement` — 刚体 MVP：比较候选在不同滑动初速度下的预测分歧，输出测量计划。
+- `revise_model` — 待接入：Coding Agent 的候选补丁分支；须经过单位、稳定性与回归检查。
+- `真实测量接口` — 待接入：相机 / 力 / 压力采集需外部执行；请求本身不产生真实证据。
+
+### 仿真辨识：MuJoCo · SciPy · NumPy
+
+输入：固定模型、拟合 episode、参数边界与仿真预算。
+
+输出：候选参数、轨迹、拟合记录与辨识诊断。
+
+状态：仅刚体滑动完成合成验证。
+
+- `replay_episode / MuJoCoAdapter.rollout` — 合成验证：在同一动作和初态下生成刚体轨迹，记录失败和成本。
+- `calibrate_parameters` — 合成验证：SciPy differential_evolution 或 least_squares 进行有界搜索。
+- `calibrate_deformable` — 待接入：PhysTwin 是柔性建模的候选研究入口；尚未接入本项目。滴管气液模型还需单独实现。
+
+### 开发比较：独立指标计算 · 固定接受规则
+
+输入：基线、候选、开发 episode 与冻结评价器。
+
+输出：接受 / 拒绝 / 证据不足及对应证据。
+
+状态：刚体 MVP 已实现。
+
+- `evaluate_candidate` — 已有实现：只在 development split 上计算逐 episode 与汇总指标。
+- `metrics / aggregate` — 已有实现：比较轨迹、停止位置和停止时序；候选不能自行修改接受阈值。
+- `RunManifest / 研究谱系` — 记录接口：关联数据版本、参数、运行成本、父版本与判定；完整 Agent 谱系仍待外循环验证。
+
+### 独立检验：独立最终评估 · MJCF 重放
+
+输入：冻结的模型、参数、代码与封存 episode。
+
+输出：独立测试报告、失败条件与适用范围。
+
+状态：刚体合成测试已验证。
+
+- `独立最终评估器` — 合成验证：在封存轨迹上执行最终预测；结果不反馈给本轮模型选择。
+- `scripts/replay_export.py` — 合成验证：独立加载保存的 MJCF，核对导出模型重放一致性。
+
+### 交付与继承：package_twin · Blender · 版本记录
+
+输入：场景、参数来源、重放动作、环境与评估报告。
+
+输出：TwinPackage、MJCF、.blend、证据与适用范围。
+
+状态：刚体 MVP 已实现；通用技能继承待扩展。
+
+- `package_twin` — 已有实现：打包可重放场景、参数与报告，保留 assumed / effective 等来源标记。
+- `SkillPackage` — 拟议接口：通过回归的建模程序连同前置条件与失败模式一起继承；并非无条件迁移物性。

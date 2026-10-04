@@ -185,3 +185,179 @@ window.addEventListener('scroll',()=>{if(!scrollScheduled){requestAnimationFrame
 $('back-top').addEventListener('click',()=>{$('top').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});});
 updateScroll();
 
+
+// Tool map snapshot: see docs/tool-map.json.
+const toolStages = [{"id": "evidence", "label": "整理观测", "title": "把观测整理成可重放的 episode", "stack": "数据校验 · 几何测量", "status": "刚体 MVP 已实现；视频前端待接入", "input": "独立轨迹、动作时间戳、尺度与相机信息", "output": "Episode、质量掩码、数据版本", "tools": [["prepare_episode", "已有实现", "校验独立 episode、任务引用与数据哈希。"], ["measure_dimensions", "已有实现", "由有来源的三维点与显式坐标变换测量尺寸。"], ["reconstruct_reference / segment_scene / track_interaction", "待接入", "计划连接 AHa-3D 的 Pi3X / SAM3 相关前端；真实视频端到端链路尚未验收。"]]}, {"id": "scene", "label": "构建场景", "title": "从资产建立可编辑、可执行的场景", "stack": "AHa-3D · Blender · MuJoCo", "status": "资产检索与合成场景已验证；通用场景检查未通过", "input": "资产查询、几何尺寸、装配与支撑约束", "output": "可编辑 .blend、SceneBundle、MJCF", "tools": [["retrieve_assets", "已验证", "查询真实 AHa-3D 资产索引。"], ["build_editable_scene", "合成验证", "用 Blender 创建并重新打开合成盒子场景。"], ["compile_simulation", "刚体 MVP", "把 SI 单位的盒子场景编译为 MuJoCo MJCF。"], ["verify_xray / validate_scene_physics", "未完成", "源视角复核尚未验证；已尝试的放置检查仍有 not_settled 问题。"]]}, {"id": "protocol", "label": "冻结协议", "title": "所有候选共享同一套数据与评价规则", "stack": "Pydantic · SQLite · Landlock", "status": "刚体 MVP 已验证", "input": "TaskSpec、参数范围、数据划分、预算与指标", "output": "冻结协议、预算记录、隔离的封存数据", "tools": [["TaskSpec / Episode / ParameterSpec", "数据契约", "Pydantic 校验任务、观测、单位与参数边界。"], ["Store", "已有实现", "SQLite 记录仿真请求、预算、缓存和暂停 / 恢复状态。"], ["restrict", "Linux 隔离", "Landlock 限制研究进程访问封存数据；独立最终评估另行执行。"]]}, {"id": "diagnose", "label": "诊断假设", "title": "先判断为什么错，再选择如何修改", "stack": "NumPy · 本地文献索引 · LLM 接口", "status": "数值诊断已有实现；真实 LLM 外循环待验证", "input": "逐阶段残差、参数候选、场景与历史记录", "output": "敏感性报告、竞争假设、缺测清单", "tools": [["analyze_sensitivity / diagnose_identifiability", "刚体 MVP", "有限差分、SVD 和剖面损失帮助发现耦合与不可辨识量。"], ["retrieve_literature", "已有实现", "只检索本地已核验文献登记表，不等同于实时全网检索。"], ["LLM research controller", "待验证", "解释证据、登记假设并选择下一步；尚无真实模型调用验收。"]]}, {"id": "design", "label": "选择实验", "title": "决定调参数、改模型，还是补测", "stack": "候选分歧排序 · MeasurementPlan", "status": "刚体补测建议已实现；真实采集与机制修订待接入", "input": "竞争解释、动作约束、观测噪声与采集成本", "output": "实验规范，或真实测量请求", "tools": [["rank_probe_actions / propose_measurement", "刚体 MVP", "比较候选在不同滑动初速度下的预测分歧，输出测量计划。"], ["revise_model", "待接入", "Coding Agent 的候选补丁分支；须经过单位、稳定性与回归检查。"], ["真实测量接口", "待接入", "相机 / 力 / 压力采集需外部执行；请求本身不产生真实证据。"]]}, {"id": "fit", "label": "仿真辨识", "title": "数值优化器调用仿真器，循环比较残差", "stack": "MuJoCo · SciPy · NumPy", "status": "仅刚体滑动完成合成验证", "input": "固定模型、拟合 episode、参数边界与仿真预算", "output": "候选参数、轨迹、拟合记录与辨识诊断", "tools": [["replay_episode / MuJoCoAdapter.rollout", "合成验证", "在同一动作和初态下生成刚体轨迹，记录失败和成本。"], ["calibrate_parameters", "合成验证", "SciPy differential_evolution 或 least_squares 进行有界搜索。"], ["calibrate_deformable", "待接入", "PhysTwin 是柔性建模的候选研究入口；尚未接入本项目。滴管气液模型还需单独实现。"]]}, {"id": "review", "label": "开发比较", "title": "新旧候选在相同开发集上比较", "stack": "独立指标计算 · 固定接受规则", "status": "刚体 MVP 已实现", "input": "基线、候选、开发 episode 与冻结评价器", "output": "接受 / 拒绝 / 证据不足及对应证据", "tools": [["evaluate_candidate", "已有实现", "只在 development split 上计算逐 episode 与汇总指标。"], ["metrics / aggregate", "已有实现", "比较轨迹、停止位置和停止时序；候选不能自行修改接受阈值。"], ["RunManifest / 研究谱系", "记录接口", "关联数据版本、参数、运行成本、父版本与判定；完整 Agent 谱系仍待外循环验证。"]]}, {"id": "final", "label": "独立检验", "title": "候选冻结后，才读取封存测试", "stack": "独立最终评估 · MJCF 重放", "status": "刚体合成测试已验证", "input": "冻结的模型、参数、代码与封存 episode", "output": "独立测试报告、失败条件与适用范围", "tools": [["独立最终评估器", "合成验证", "在封存轨迹上执行最终预测；结果不反馈给本轮模型选择。"], ["scripts/replay_export.py", "合成验证", "独立加载保存的 MJCF，核对导出模型重放一致性。"]]}, {"id": "package", "label": "交付与继承", "title": "交付模型，也交付相信它的依据", "stack": "package_twin · Blender · 版本记录", "status": "刚体 MVP 已实现；通用技能继承待扩展", "input": "场景、参数来源、重放动作、环境与评估报告", "output": "TwinPackage、MJCF、.blend、证据与适用范围", "tools": [["package_twin", "已有实现", "打包可重放场景、参数与报告，保留 assumed / effective 等来源标记。"], ["SkillPackage", "拟议接口", "通过回归的建模程序连同前置条件与失败模式一起继承；并非无条件迁移物性。"]]}];
+
+// Explicitly started teaching animations; never call a simulator or a remote API.
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+function pauseOutside(element, pause) {
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(entries => {
+      if (!entries[0].isIntersecting) pause('已离开演示区域，自动暂停。');
+    }, {threshold: 0}).observe(element);
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) pause('页面进入后台，自动暂停。');
+  });
+}
+function initToolFlow() {
+  const root = $('tool-flow');
+  const steps = [...root.querySelectorAll('[data-flow-step]')];
+  let index = 0, running = false, timer = null;
+  const lastIndex = () => $('flow-route').value === 'calibration' ? toolStages.length - 1 : 4;
+  const terminal = () => index === lastIndex();
+  function controlState(message) {
+    root.classList.toggle('is-playing', running);
+    $('flow-play').textContent = reducedMotion.matches ? '逐步查看' : running ? '暂停' : terminal() ? '重新播放' : '播放流程';
+    $('flow-play').setAttribute('aria-pressed', String(running));
+    if (message) text('flow-status', message);
+  }
+  function pause(message) {
+    clearTimeout(timer); timer = null;
+    const wasRunning = running; running = false;
+    controlState(wasRunning ? message || '已暂停，可逐步查看。' : '');
+  }
+  function render(message) {
+    const stage = toolStages[index];
+    const route = $('flow-route').value;
+    steps.forEach((step, i) => {
+      step.setAttribute('aria-pressed', String(i === index));
+      step.classList.toggle('is-complete', i < index);
+      step.disabled = i > lastIndex();
+    });
+    root.dataset.stage = stage.id;
+    text('flow-counter', `${String(index + 1).padStart(2,'0')} / ${String(lastIndex() + 1).padStart(2,'0')} · 示例调用顺序`);
+    text('flow-title', stage.title);
+    text('flow-description', stage.status);
+    text('flow-input', '输入 / ' + stage.input);
+    text('flow-output', '输出 / ' + stage.output);
+    text('flow-limit', '这里列出接口与职责；没有发起工具调用，也没有生成实验结果。');
+    $('flow-detail-link').href = '#tools-' + stage.id;
+    $('flow-tools').replaceChildren(...stage.tools.map(([name, status]) => {
+      const row = document.createElement('div');
+      const code = document.createElement('code'); code.textContent = name;
+      const badge = document.createElement('span'); badge.textContent = status;
+      row.append(code, badge); return row;
+    }));
+    if (index === 5) {
+      const loop = document.createElement('div'); loop.className = 'inner-loop';
+      ['参数 θ','MuJoCo 重放','计算残差','SciPy 更新 θ'].forEach(label => {
+        const item = document.createElement('span'); item.textContent = label; loop.append(item);
+      });
+      $('flow-tools').append(loop);
+    }
+    if (terminal() && route === 'measurement') {
+      text('flow-title', '停在测量请求，等待新的真实证据。');
+      text('flow-description', '调用 rank_probe_actions / propose_measurement 形成计划；真实采集尚未发生。');
+      text('flow-output', '输出 / MeasurementPlan；外部采集完成后，建立新数据版本并共同重评。');
+      text('flow-limit', '本次演示在这里停止，不把计划或预测写成真实观测。');
+    } else if (terminal() && route === 'revision') {
+      text('flow-title', '机制缺失：准备候选补丁与检查计划。');
+      text('flow-description', 'revise_model 是待接入分支；拟由 Coding Agent 产生最小机制修订。');
+      text('flow-output', '目标输出 / 可回滚补丁、单位与稳定性检查、回归记录。');
+      text('flow-limit', '当前没有已通过的补丁；检查完成后才能进入开发比较，不能直接继承。');
+    }
+    $('flow-prev').disabled = index === 0;
+    $('flow-next').disabled = terminal();
+    controlState(message || (terminal() ? '已到达本路径终点。' : '已暂停；点击播放或选择节点。'));
+  }
+  function schedule() {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      if (!running) return;
+      index++;
+      if (terminal()) { running = false; render('流程演示结束。没有执行真实工具。'); }
+      else { render('正在演示调用顺序…'); schedule(); }
+    }, Number($('flow-speed').value));
+  }
+  $('flow-play').addEventListener('click', () => {
+    if (reducedMotion.matches) { pause(); index = terminal() ? 0 : index + 1; render('减少动态效果：手动逐步查看。'); return; }
+    if (running) { pause('已暂停，可逐步查看。'); return; }
+    if (terminal()) index = 0;
+    running = true; render('正在演示调用顺序…'); schedule();
+  });
+  $('flow-next').addEventListener('click', () => { pause(); index = Math.min(lastIndex(), index + 1); render(); });
+  $('flow-prev').addEventListener('click', () => { pause(); index = Math.max(0, index - 1); render(); });
+  $('flow-reset').addEventListener('click', () => { pause(); index = 0; render('已重置。'); });
+  $('flow-route').addEventListener('change', () => { pause(); index = 0; render('已切换研究路径。'); });
+  $('flow-speed').addEventListener('change', () => { if (running) schedule(); });
+  steps.forEach((button, i) => button.addEventListener('click', () => { pause(); index = i; render(); }));
+  $('flow-detail-link').addEventListener('click', () => { pause(); $('tools-' + toolStages[index].id).open = true; });
+  reducedMotion.addEventListener('change', () => { pause(); controlState('动态效果偏好已更新。'); });
+  root.hidden = false; render(); pauseOutside(root, pause);
+}
+function initPipetteMotion() {
+  const root = $('pipette-motion'), slider = $('pipette-progress');
+  const buttons = [...root.querySelectorAll('[data-pipette-stage]')];
+  let progress = 0, running = false, frame = null, lastTime = null, activeStage = -1;
+  const descriptions = [
+    ['01 / COMPRESS','先在空气中压缩，排出气体。','管尖保持在液面上方。压缩幅度改变胶头体积；进入浸入阶段之前不能松开。','prepare_episode；计划中的 track_interaction','压缩位移 x(t)、管尖位置、动作时间戳。'],
+    ['02 / IMMERSE','保持压缩，再把管尖浸入。','胶头保持压缩形状。管尖进入已知深度，持管支撑保留，输入动作和边界条件一起记录。','measure_dimensions；计划中的 validate_scene_physics','浸入深度、支撑位置、密封连接与动作次序。'],
+    ['03 / RELEASE','解除压缩，观察回弹与吸液。','胶头回弹改变气腔状态，压差驱动液体进入管内。真实回弹速度、压力和流量需要观测与模型共同解释。','计划中的 track_interaction + 滴管低阶耦合求解器','胶头位移 x(t)、液面 h(t)；需要区分歧义时补测压力 p(t)。']
+  ];
+  const clamp = n => Math.max(0, Math.min(1, n));
+  function controls(message) {
+    root.classList.toggle('is-playing', running);
+    $('pipette-play').textContent = reducedMotion.matches ? '下一阶段' : running ? '暂停' : progress >= 100 ? '重新播放' : '播放动作';
+    $('pipette-play').setAttribute('aria-pressed', String(running));
+    if (message) text('pipette-motion-status', message);
+  }
+  function pause(message) {
+    if (frame !== null) cancelAnimationFrame(frame);
+    frame = null; lastTime = null;
+    const wasRunning = running; running = false;
+    controls(wasRunning ? message || '已暂停' : '');
+  }
+  function draw(value) {
+    progress = Math.max(0, Math.min(100, value));
+    const compression = clamp(progress / 32), immersion = clamp((progress - 32) / 28), release = clamp((progress - 60) / 40);
+    const shift = immersion * 62, top = 158 + shift, bottom = 317 + shift;
+    const width = 42 - compression * 18 + release * 18, bulbTop = 63 + shift - release * 8;
+    $('live-bulb').setAttribute('d', `M248 ${top}C248 ${top-20} ${260-width} ${top-31} ${260-width} ${bulbTop+27}C${260-width} ${bulbTop-10} ${260+width} ${bulbTop-10} ${260+width} ${bulbTop+27}C${260+width} ${top-31} 272 ${top-20} 272 ${top}Z`);
+    $('live-tube').setAttribute('d', `M250 ${top}V${bottom-16}L256 ${bottom}M264 ${bottom}L270 ${bottom-16}V${top}`);
+    $('live-collar').setAttribute('y', top - 3);
+    const liquidTop = 343 - release * 80;
+    $('live-liquid').setAttribute('d', release > 0 ? `M253 ${liquidTop}H267V${bottom-17}L263 ${bottom}H257L253 ${bottom-17}Z` : 'M0 0');
+    $('live-left-force').setAttribute('d', `M${260-width-48} ${bulbTop+30}H${260-width-8}m-7 -5 7 5-7 5`);
+    $('live-right-force').setAttribute('d', `M${260+width+48} ${bulbTop+30}H${260+width+8}m7 -5-7 5 7 5`);
+    $('live-compression').setAttribute('opacity', String(1 - release));
+    $('live-support-arm').setAttribute('d', `M456 ${222+shift}H277`);
+    $('live-support-clamp').setAttribute('y', 216+shift);
+    $('live-support-label').setAttribute('y', 205+shift);
+    $('live-flow-arrow').setAttribute('opacity', release > 0 && release < 1 ? '1' : '0');
+    $('live-flow-arrow').setAttribute('d', `M227 365V${Math.max(275,liquidTop)}`);
+    slider.value = String(Math.round(progress));
+    text('pipette-progress-label', Math.round(progress) + '%');
+    const stage = progress <= 32 ? 0 : progress <= 60 ? 1 : 2;
+    slider.setAttribute('aria-valuetext', `${Math.round(progress)}%，${['压缩','浸入','释放'][stage]}阶段`);
+    if (stage !== activeStage) {
+      activeStage = stage;
+      const data = descriptions[stage];
+      ['kicker','title','description','tools','observe'].forEach((name,i) => text('pipette-live-'+name,data[i]));
+      buttons.forEach((button,i) => button.setAttribute('aria-pressed', String(i === stage)));
+    }
+  }
+  function tick(time) {
+    if (!running) return;
+    if (lastTime === null) lastTime = time;
+    const delta = time - lastTime; lastTime = time;
+    draw(progress + delta / 120);
+    if (progress >= 100) { pause(); controls('动作演示结束；图中没有物理测量值。'); }
+    else frame = requestAnimationFrame(tick);
+  }
+  function jump(stage) { pause(); draw([32,60,100][stage]); controls('已暂停在所选阶段。'); }
+  $('pipette-play').addEventListener('click', () => {
+    if (reducedMotion.matches) { jump((activeStage + 1) % 3); return; }
+    if (running) { pause('已暂停，可拖动进度查看。'); return; }
+    if (progress >= 100) draw(0);
+    running = true; controls('正在播放动作示意…'); frame = requestAnimationFrame(tick);
+  });
+  $('pipette-reset').addEventListener('click', () => { pause(); draw(0); controls('已重置。'); });
+  slider.addEventListener('input', () => { pause(); draw(Number(slider.value)); controls('已暂停，可继续拖动。'); });
+  buttons.forEach((button,i) => button.addEventListener('click', () => jump(i)));
+  reducedMotion.addEventListener('change', () => { pause(); controls('动态效果偏好已更新。'); });
+  root.hidden = false; draw(0); controls(); pauseOutside(root, pause);
+}
+initToolFlow();
+initPipetteMotion();
