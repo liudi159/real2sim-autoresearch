@@ -168,7 +168,7 @@ $('reference-search').addEventListener('input',event=>{
 });
 
 const navLinks=[...document.querySelectorAll('.site-header nav a')];
-const sections=[...document.querySelectorAll('main section[id]')];
+const sections=[...document.querySelectorAll('main > section[id], main .chapter[id]')];
 let scrollScheduled=false;
 function updateScroll(){
   const threshold=160;
